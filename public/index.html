@@ -1,39 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UPC Helper</title>
+
 <style>
+
 body{
-    font-family: Arial;
-    max-width:900px;
-    margin:auto;
-    padding:20px;
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
 }
+
 textarea{
     width:100%;
-    height:250px;
-}
-pre{
-    white-space:pre-wrap;
-    border:1px solid #ccc;
+    height:300px;
     padding:10px;
 }
+
+input{
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+}
+
+button{
+    padding:10px 20px;
+    cursor:pointer;
+}
+
+pre{
+    white-space: pre-wrap;
+    border:1px solid #ccc;
+    padding:15px;
+    margin-top:20px;
+}
+
 </style>
 </head>
 <body>
 
-<h2>UPC Helper</h2>
+<h1>UPC Helper</h1>
 
-<textarea id="caso"></textarea>
+<input
+    type="password"
+    id="password"
+    placeholder="Contraseña"
+/>
+
+<textarea
+    id="caso"
+    placeholder="Pega aquí el caso..."
+></textarea>
 
 <br><br>
 
 <button onclick="resolver()">
 Resolver
 </button>
-
-<hr>
 
 <pre id="resultado"></pre>
 
@@ -44,23 +70,59 @@ async function resolver(){
     const caso =
         document.getElementById("caso").value;
 
-    document.getElementById("resultado")
-        .textContent = "Pensando...";
+    const password =
+        document.getElementById("password").value;
 
-    const r = await fetch("/api/solve",{
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-            caso
-        })
-    });
+    const resultado =
+        document.getElementById("resultado");
 
-    const data = await r.json();
+    resultado.textContent =
+        "Pensando...";
 
-    document.getElementById("resultado")
-        .textContent = data.answer;
+    try{
+
+        const r = await fetch(
+            "/api/solve",
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":
+                        "application/json"
+                },
+                body:JSON.stringify({
+                    password,
+                    caso
+                })
+            }
+        );
+
+        const data =
+            await r.json();
+
+        if(data.answer){
+
+            resultado.textContent =
+                data.answer;
+
+        }else{
+
+            resultado.textContent =
+                JSON.stringify(
+                    data,
+                    null,
+                    2
+                );
+
+        }
+
+    }catch(err){
+
+        resultado.textContent =
+            "ERROR:\n" +
+            err.message;
+
+    }
+
 }
 
 </script>
