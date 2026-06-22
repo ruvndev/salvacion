@@ -1,69 +1,65 @@
-export default async function handler(req,res){
+export default async function handler(req, res) {
 
-    const caso = req.body.caso;
+    try {
 
-    const prompt = `
-Eres un experto en Ingeniería de Requisitos UPC.
+        console.log("BODY:", req.body);
 
-Genera EXACTAMENTE:
+        const caso =
+            req.body?.caso ||
+            "Caso de prueba";
 
-A) Dos Epics
+        const response =
+            await fetch(
+                "https://api.deepseek.com/chat/completions",
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization:
+                            `Bearer ${process.env.DEEPSEEK_API_KEY}`,
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        model: "deepseek-chat",
+                        messages: [
+                            {
+                                role: "user",
+                                content: caso
+                            }
+                        ]
+                    })
+                }
+            );
 
-B) Cuatro User Stories funcionales
-(2 por Epic)
+        const data =
+            await response.json();
 
-C) Dos User Stories no funcionales
+        console.log("DEEPSEEK:", data);
 
-D) Story Points para 2 historias
-justificando:
-- Complejidad
-- Riesgo
-- Repetición
+        if (!data.choices) {
 
-E) Acceptance Criteria
-
-Usa:
-
-Happy Path
-Alternate
-Exception
-
-Formato:
-Given
-When
-Then
-
-Caso:
-${caso}
-`;
-
-    const response =
-    await fetch(
-        "https://api.deepseek.com/chat/completions",
-        {
-            method:"POST",
-            headers:{
-                "Authorization":
-                    `Bearer ${process.env.DEEPSEEK_API_KEY}`,
-                "Content-Type":
-                    "application/json"
-            },
-            body:JSON.stringify({
-                model:"deepseek-chat",
-                messages:[
-                    {
-                        role:"user",
-                        content:prompt
-                    }
-                ]
-            })
+            return res.status(500).json({
+                error:
+                    "DeepSeek no devolvió choices",
+                deepseek:
+                    data
+            });
         }
-    );
 
-    const data = await response.json();
+        return res.json({
+            answer:
+                data.choices[0]
+                    .message
+                    .content
+        });
 
-    res.status(200).json({
-        answer:
-            data.choices[0].message.content
-    });
+    } catch (err) {
+
+        console.error(err);
+
+        return res.status(500).json({
+            error:
+                err.message
+        });
+    }
 }
