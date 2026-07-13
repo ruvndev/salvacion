@@ -638,7 +638,7 @@ dato ni respuesta perteneciente a otro caso.
 
 <ENUNCIADO_ACTUAL>
 
-{CASO}
+{{CASO}}
 
 </ENUNCIADO_ACTUAL>
 `;
