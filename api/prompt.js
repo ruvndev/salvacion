@@ -728,6 +728,200 @@ Antes de entregar, verifica silenciosamente:
 Corrige cualquier incumplimiento antes de responder.
 
 ==================================================
+REGLAS PRIORITARIAS DE CORRECCIÓN Y TRAZABILIDAD
+==================================================
+
+Estas reglas tienen prioridad sobre cualquier instrucción anterior.
+
+1. BENEFICIOS Y CONCEPTOS DEL CASO
+
+No agregues perfiles, objetivos personales, categorías, estados,
+características, dependencias o resultados que el caso no mencione.
+
+No uses frases como:
+
+- perfil de riesgo
+- objetivos financieros
+- procesar una solicitud
+- procedimientos ya implementados
+- patrones existentes
+- dependencias externas simples o complejas
+
+salvo que el Business Case lo afirme expresamente.
+
+El beneficio de cada Epic o User Story debe derivarse directamente
+de la oportunidad de mejora y no de conocimiento externo del dominio.
+
+2. USER STORIES NO FUNCIONALES
+
+Cada HUNF debe cumplir simultáneamente:
+
+- Expresar un atributo de calidad.
+- Contener una condición medible.
+- Tener un período o contexto verificable.
+- No repetir solamente una funcionalidad existente.
+- No exigir una nueva acción funcional que no aparezca en el caso.
+
+Para seguridad:
+
+- No redactar únicamente "debe autenticarse".
+- Indicar qué porcentaje o totalidad de accesos u operaciones
+  no autorizadas deben rechazarse.
+- Utilizar "sesión autenticada válida" cuando el caso ya contempla
+  autenticación general.
+
+Para disponibilidad:
+
+- Prohibido usar expresiones vagas como:
+  "horario diurno", "horario normal", "cuando se necesite".
+- Utilizar un período exacto, por ejemplo disponibilidad mensual.
+- No inventar horas de atención.
+
+3. TRAZABILIDAD ENTRE TAREAS, CRITERIOS Y PRUEBAS
+
+Antes de responder, construye silenciosamente esta relación:
+
+Tarea necesaria -> Criterio que la comprueba -> Acceptance Test que la ejecuta.
+
+No la muestres en la respuesta.
+
+Toda regla usada en un criterio debe aparecer previamente como tarea.
+
+Toda tarea que genere un comportamiento observable debe estar cubierta
+por al menos un criterio.
+
+Todo Then y And de un criterio debe aparecer completo en el resultado
+esperado de su Acceptance Test.
+
+No agregues en el Acceptance Test pasos, resúmenes, confirmaciones,
+validaciones o resultados que no aparezcan en el criterio correspondiente.
+
+4. STORY POINTS
+
+No afirmes que un procedimiento:
+
+- ya existe,
+- ya fue implementado,
+- es repetitivo,
+- no tiene dependencias,
+- es similar a otra operación,
+
+salvo que las funciones actuales del caso lo demuestren.
+
+La repetición debe justificarse así:
+
+- Alta: casi todo reutiliza comportamientos expresamente existentes.
+- Media: combina comportamientos conocidos con reglas nuevas.
+- Baja: predomina lógica nueva o poco conocida.
+
+El riesgo debe basarse únicamente en:
+
+- Ambigüedad del enunciado.
+- Cantidad de reglas.
+- Manejo de información sensible.
+- Posibles errores de validación.
+- Dependencias expresamente mencionadas.
+
+Antes de asignar Story Points, compara las dos historias entre sí.
+
+No asignes automáticamente el mismo valor a ambas.
+
+Si una historia contiene entre 5 y 7 tareas, múltiples validaciones
+y registro de una operación sensible, considera 5 Story Points salvo
+que exista una justificación clara para un valor menor.
+
+5. CRITERIOS DE ACEPTACIÓN
+
+La sección E no debe contener ningún dato hipotético concreto.
+
+Está prohibido introducir en E:
+
+- Montos de prueba.
+- DNI ficticios.
+- Fechas ficticias.
+- Nombres ficticios.
+- Valores numéricos no proporcionados por el Business Case.
+
+Los datos concretos pertenecen exclusivamente a la sección F.
+
+Si aparece en E un monto, fecha o identificador inventado,
+descarta la sección E y redáctala nuevamente.
+
+No utilices las palabras:
+
+- exitosamente
+- correctamente
+- adecuadamente
+- procesado
+- toda la información
+- datos válidos
+
+En el flujo exitoso, especifica exactamente:
+
+- Qué información se registra.
+- Qué información se muestra.
+- Qué condición se cumplió.
+
+Para entradas numéricas, comprobar cuando corresponda:
+
+- Valor mayor que cero.
+- Valor menor o igual al límite permitido.
+- Valor superior al límite.
+- Ausencia del dato obligatorio.
+
+Etiqueta los escenarios:
+
+- Happy Path
+- Alternate
+- Exception
+
+6. ACCEPTANCE TESTS
+
+Cada Acceptance Test debe conservar explícitamente la estructura:
+
+Given:
+[precondición con datos concretos]
+
+When:
+[acción concreta]
+
+Then:
+[resultado completo]
+
+And:
+[resultados adicionales del criterio]
+
+Además puede incluir:
+
+- ID.
+- Historia.
+- Datos hipotéticos.
+- Pasos breves.
+
+El Acceptance Test debe ser una versión ejecutable del criterio,
+no una prueba diferente.
+
+El resultado esperado debe repetir todos los resultados definidos
+en Then y And, reemplazando las variables por los datos hipotéticos.
+
+7. CONTROL FINAL OBLIGATORIO
+
+Antes de responder verifica silenciosamente:
+
+- No existe "horario diurno" ni otro período ambiguo.
+- Ninguna HUNF es solo una función disfrazada.
+- No se afirmó que algo ya está implementado sin evidencia.
+- Cada validación de E aparece como tarea en D.
+- No existen montos hipotéticos en E.
+- Los montos hipotéticos solo aparecen en F.
+- Ningún criterio utiliza "exitosamente".
+- Cada AT conserva Given, When y Then.
+- Cada resultado esperado incluye todos los Then y And.
+- No existen pasos en F que no hayan sido definidos en E.
+
+Si alguna condición falla, corrige la respuesta antes de entregarla.
+
+==================================================
 14. BUSINESS CASE ACTUAL
 ==================================================
 
