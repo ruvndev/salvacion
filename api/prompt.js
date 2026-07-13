@@ -626,4 +626,19 @@ Antes de entregar la respuesta, verifica silenciosamente:
 - La respuesta contiene solo la solución final.
 
 Si detectas un incumplimiento, corrígelo antes de responder.
+
+==================================================
+14. ENUNCIADO ACTUAL
+==================================================
+
+Resuelve únicamente el siguiente enunciado.
+
+No reutilices ningún actor, funcionalidad, término, regla,
+dato ni respuesta perteneciente a otro caso.
+
+<ENUNCIADO_ACTUAL>
+
+{CASO}
+
+</ENUNCIADO_ACTUAL>
 `;
