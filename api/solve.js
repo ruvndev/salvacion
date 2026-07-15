@@ -61,7 +61,7 @@ export default async function handler(
                     },
                     body:JSON.stringify({
                         model:
-                            "deepseek-chat",
+                            "deepseek-v4-pro",
                         messages:[
                             {
                                 role:"user",
