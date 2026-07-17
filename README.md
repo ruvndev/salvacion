@@ -5,7 +5,7 @@ Aplicación utilitaria de dos pestañas para guardar textos completos y recupera
 ## Cómo funciona
 
 - Cada guardado se conserva como un JSON independiente e inmutable en Vercel Blob.
-- Las cargas se hacen directamente desde el navegador, por lo que admiten textos muy grandes sin pasar por el límite de 4.5 MB de una Vercel Function.
+- Las cargas usan URLs presignadas y se hacen directamente desde el navegador, por lo que admiten textos muy grandes sin pasar por el límite de 4.5 MB de una Vercel Function.
 - El almacén debe ser **Private**. Los archivos no tienen lectura pública.
 - La recuperación exige `APP_PASSWORD`, crea una sesión temporal y entrega enlaces firmados de corta duración.
 - La interfaz recorre automáticamente todas las páginas del almacén y recupera todos los elementos.
@@ -18,7 +18,7 @@ Aplicación utilitaria de dos pestañas para guardar textos completos y recupera
 4. Conserva la variable existente `APP_PASSWORD` con la contraseña de recuperación.
 5. Vuelve a desplegar el proyecto.
 
-Al conectar el almacén, Vercel agrega automáticamente las credenciales `BLOB_READ_WRITE_TOKEN`, `BLOB_STORE_ID` y las credenciales OIDC necesarias.
+Al conectar el almacén, Vercel agrega automáticamente `BLOB_STORE_ID`, `VERCEL_OIDC_TOKEN` y `BLOB_WEBHOOK_PUBLIC_KEY`. La aplicación usa esas credenciales OIDC rotativas para guardar y recuperar los textos.
 
 ## Desarrollo
 

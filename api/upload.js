@@ -1,9 +1,19 @@
-import { handleUpload } from "@vercel/blob/client";
+import { issueSignedToken } from "@vercel/blob";
+import { handleUploadPresigned } from "@vercel/blob/client";
 
 const ENTRY_PATH = /^entries\/[A-Za-z0-9._-]{1,180}\.json$/;
+const ALLOWED_CONTENT_TYPES = ["application/json"];
+const UPLOAD_TOKEN_DURATION_MS = 10 * 60 * 1000;
 
-function storageIsConnected(){
-    return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+export function storageIsConnected(){
+    const hasOidcCredentials = Boolean(
+        process.env.BLOB_STORE_ID && process.env.VERCEL_OIDC_TOKEN
+    );
+
+    return Boolean(
+        process.env.BLOB_WEBHOOK_PUBLIC_KEY &&
+        (hasOidcCredentials || process.env.BLOB_READ_WRITE_TOKEN)
+    );
 }
 
 export default async function handler(req, res){
@@ -23,19 +33,29 @@ export default async function handler(req, res){
     }
 
     try{
-        const result = await handleUpload({
+        const result = await handleUploadPresigned({
             request: req,
             body: req.body,
-            onBeforeGenerateToken: async pathname => {
+            getSignedToken: async pathname => {
                 if(!ENTRY_PATH.test(pathname)){
                     throw new Error("Ruta de guardado no válida.");
                 }
 
+                const validUntil = Date.now() + UPLOAD_TOKEN_DURATION_MS;
+
                 return {
-                    allowedContentTypes: ["application/json"],
-                    addRandomSuffix: false,
-                    allowOverwrite: false,
-                    validUntil: Date.now() + (10 * 60 * 1000)
+                    token: await issueSignedToken({
+                        pathname,
+                        operations: ["put"],
+                        allowedContentTypes: ALLOWED_CONTENT_TYPES,
+                        validUntil
+                    }),
+                    urlOptions: {
+                        allowedContentTypes: ALLOWED_CONTENT_TYPES,
+                        addRandomSuffix: false,
+                        allowOverwrite: false,
+                        validUntil
+                    }
                 };
             }
         });

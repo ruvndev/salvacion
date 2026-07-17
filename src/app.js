@@ -1,4 +1,4 @@
-import { upload } from "@vercel/blob/client";
+import { uploadPresigned } from "@vercel/blob/client";
 
 const elements = {
     tabs: [...document.querySelectorAll("[data-tab]")],
@@ -142,7 +142,7 @@ async function saveText(event){
         const timestamp = createdAt.replaceAll(":", "-");
         const pathname = `entries/${timestamp}_${id}.json`;
 
-        await upload(pathname, file, {
+        await uploadPresigned(pathname, file, {
             access: "private",
             handleUploadUrl: "/api/upload",
             contentType: "application/json",

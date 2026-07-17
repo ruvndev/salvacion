@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
 import recoverHandler from "../api/recover.js";
-import uploadHandler from "../api/upload.js";
+import uploadHandler, { storageIsConnected } from "../api/upload.js";
 
 const previousEnvironment = {
     APP_PASSWORD: process.env.APP_PASSWORD,
     BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN,
     BLOB_STORE_ID: process.env.BLOB_STORE_ID,
+    BLOB_WEBHOOK_PUBLIC_KEY: process.env.BLOB_WEBHOOK_PUBLIC_KEY,
     VERCEL_OIDC_TOKEN: process.env.VERCEL_OIDC_TOKEN
 };
 
@@ -41,6 +42,7 @@ before(() => {
     process.env.APP_PASSWORD = "contraseña-api";
     delete process.env.BLOB_READ_WRITE_TOKEN;
     delete process.env.BLOB_STORE_ID;
+    delete process.env.BLOB_WEBHOOK_PUBLIC_KEY;
     delete process.env.VERCEL_OIDC_TOKEN;
 });
 
@@ -64,6 +66,20 @@ test("la carga informa cuando Blob todavía no está conectado", async () => {
 
     assert.equal(response.statusCode, 503);
     assert.match(response.body.error, /almacenamiento/i);
+});
+
+test("la carga reconoce las credenciales OIDC de Blob", async () => {
+    process.env.BLOB_STORE_ID = "store_test";
+    process.env.BLOB_WEBHOOK_PUBLIC_KEY = "public-key-test";
+    process.env.VERCEL_OIDC_TOKEN = "oidc-test";
+
+    try{
+        assert.equal(storageIsConnected(), true);
+    }finally{
+        delete process.env.BLOB_STORE_ID;
+        delete process.env.BLOB_WEBHOOK_PUBLIC_KEY;
+        delete process.env.VERCEL_OIDC_TOKEN;
+    }
 });
 
 test("la recuperación rechaza una contraseña incorrecta", async () => {
