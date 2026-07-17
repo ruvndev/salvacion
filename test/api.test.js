@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { after, before, test } from "node:test";
-import recoverHandler from "../api/recover.js";
+import recoverHandler, {
+    storageIsConnected as recoveryStorageIsConnected
+} from "../api/recover.js";
 import uploadHandler, { storageIsConnected } from "../api/upload.js";
 
 const previousEnvironment = {
@@ -71,14 +73,22 @@ test("la carga informa cuando Blob todavía no está conectado", async () => {
 test("la carga reconoce las credenciales OIDC de Blob", async () => {
     process.env.BLOB_STORE_ID = "store_test";
     process.env.BLOB_WEBHOOK_PUBLIC_KEY = "public-key-test";
-    process.env.VERCEL_OIDC_TOKEN = "oidc-test";
 
     try{
         assert.equal(storageIsConnected(), true);
     }finally{
         delete process.env.BLOB_STORE_ID;
         delete process.env.BLOB_WEBHOOK_PUBLIC_KEY;
-        delete process.env.VERCEL_OIDC_TOKEN;
+    }
+});
+
+test("la recuperación reconoce un Blob conectado sin exigir OIDC en process.env", () => {
+    process.env.BLOB_STORE_ID = "store_test";
+
+    try{
+        assert.equal(recoveryStorageIsConnected(), true);
+    }finally{
+        delete process.env.BLOB_STORE_ID;
     }
 });
 

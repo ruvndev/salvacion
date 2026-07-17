@@ -6,13 +6,9 @@ const ALLOWED_CONTENT_TYPES = ["application/json"];
 const UPLOAD_TOKEN_DURATION_MS = 10 * 60 * 1000;
 
 export function storageIsConnected(){
-    const hasOidcCredentials = Boolean(
-        process.env.BLOB_STORE_ID && process.env.VERCEL_OIDC_TOKEN
-    );
-
     return Boolean(
         process.env.BLOB_WEBHOOK_PUBLIC_KEY &&
-        (hasOidcCredentials || process.env.BLOB_READ_WRITE_TOKEN)
+        (process.env.BLOB_STORE_ID || process.env.BLOB_READ_WRITE_TOKEN)
     );
 }
 

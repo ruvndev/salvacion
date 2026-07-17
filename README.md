@@ -18,7 +18,7 @@ Aplicación utilitaria de dos pestañas para guardar textos completos y recupera
 4. Conserva la variable existente `APP_PASSWORD` con la contraseña de recuperación.
 5. Vuelve a desplegar el proyecto.
 
-Al conectar el almacén, Vercel agrega automáticamente `BLOB_STORE_ID`, `VERCEL_OIDC_TOKEN` y `BLOB_WEBHOOK_PUBLIC_KEY`. La aplicación usa esas credenciales OIDC rotativas para guardar y recuperar los textos.
+Al conectar el almacén, Vercel agrega automáticamente `BLOB_STORE_ID` y `BLOB_WEBHOOK_PUBLIC_KEY`, y entrega credenciales OIDC rotativas al entorno de ejecución. La aplicación acepta el token desde el contexto de cada petición, tal como lo proporciona Vercel.
 
 ## Desarrollo
 
