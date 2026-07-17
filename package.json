@@ -1,4 +1,20 @@
 {
-  "name": "upc-helper",
-  "version": "1.0.0"
+  "name": "salvacion-text-vault",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Utilidad para guardar y recuperar textos completos en Vercel Blob.",
+  "scripts": {
+    "build": "esbuild src/app.js --bundle --minify --format=iife --target=es2020 --outfile=public/app.js",
+    "check": "npm run build && node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.6.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
 }
